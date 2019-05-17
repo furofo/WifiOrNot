@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         createNotificationChannel();
         NotificationCompat.Builder builder = new NotificationCompat.Builder( this, CHANNEL_ID);
         builder.setSmallIcon(R.drawable.ic_sms_notification);
-        builder.setContentTitle("Simple Notification");
+        builder.setContentTitle("Wifi Or Not");
         builder.setContentText("You are on Wifi");
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
