@@ -17,7 +17,12 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
+
+public class MainActivity extends AppCompatActivity  {
     private final String CHANNEL_ID = "personal_notifications";
     private final int NOTIFICATION_ID = 001;
     private String notficationText = "You are not on wifi";
@@ -36,8 +41,9 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        displayNotification();
     }
-    public void displayNotification(View view) {
+    public void displayNotification() {
         ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
@@ -52,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         createNotificationChannel();
         NotificationCompat.Builder builder = new NotificationCompat.Builder( this, CHANNEL_ID);
         builder.setSmallIcon(R.drawable.ic_sms_notification);
-        builder.setContentTitle(notficationText);
+        builder.setOngoing(true);
         builder.setContentText(notficationText);
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
@@ -95,6 +101,52 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    class Helper extends TimerTask
+    {
+        public  int i = 0;
+        public void run()
+        {
+            displayNotification();
+        }
+    }
+
+    public class Test
+    {
+        protected Test obj;
+        public  void main(String[] args) throws InterruptedException
+        {
+            obj = new Test();
+
+
+            //creating a new instance of timer class
+            Timer timer = new Timer();
+            TimerTask task = new Helper();
+
+            //instance of date object for fixed-rate execution
+            Date date = new Date();
+
+            timer.scheduleAtFixedRate(task, date, 3000);
+
+            System.out.println("Timer running");
+            synchronized(obj)
+            {
+                //make the main thread wait
+                obj.wait();
+
+                //once timer has scheduled the task 4 times,
+                //main thread resumes
+                //and terminates the timer
+                timer.cancel();
+
+                //purge is used to remove all cancelled
+                //tasks from the timer'stak queue
+                System.out.println(timer.purge());
+            }
+        }
+    }
+
 }
+
 
 
