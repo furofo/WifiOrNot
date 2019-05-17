@@ -2,6 +2,9 @@ package com.example.wifiornot;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +20,7 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity {
     private final String CHANNEL_ID = "personal_notifications";
     private final int NOTIFICATION_ID = 001;
+    private String notficationText = "You are not on wifi";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,11 +38,22 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     public void displayNotification(View view) {
+        ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if (mWifi.isConnected()) {
+            // Do whatever
+            notficationText = "You are on wifi";
+        }
+
+        else {
+            notficationText = "You are not on wifi";
+        }
         createNotificationChannel();
         NotificationCompat.Builder builder = new NotificationCompat.Builder( this, CHANNEL_ID);
         builder.setSmallIcon(R.drawable.ic_sms_notification);
-        builder.setContentTitle("Wifi Or Not");
-        builder.setContentText("You are on Wifi");
+        builder.setContentTitle(notficationText);
+        builder.setContentText(notficationText);
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
