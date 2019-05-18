@@ -2,11 +2,16 @@ package com.example.wifiornot;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NotificationCompat;
@@ -22,10 +27,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
     private final String CHANNEL_ID = "personal_notifications";
     private final int NOTIFICATION_ID = 001;
     private String notficationText = "You are not on wifi";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,10 +63,6 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
-
-
-
-
     public void displayNotification() {
         ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -68,26 +70,23 @@ public class MainActivity extends AppCompatActivity  {
         if (mWifi.isConnected()) {
             // Do whatever
             notficationText = "You are on wifi";
-        }
-
-        else {
+        } else {
             notficationText = "You are not on wifi";
         }
         createNotificationChannel();
-        NotificationCompat.Builder builder = new NotificationCompat.Builder( this, CHANNEL_ID);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
         builder.setSmallIcon(R.drawable.ic_sms_notification);
         builder.setOngoing(true);
         builder.setContentText(notficationText);
-        builder.setVibrate(new long[] { 0, 0 });
+        builder.setVibrate(new long[]{0, 0});
         builder.setPriority(NotificationCompat.PRIORITY_LOW);
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
         notificationManagerCompat.notify(NOTIFICATION_ID, builder.build());
     }
 
-   private void createNotificationChannel() {
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O)
-        {
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Personal Notification";
             String description = "Include all the personal notifications";
             int importance = NotificationManager.IMPORTANCE_LOW;
@@ -99,7 +98,8 @@ public class MainActivity extends AppCompatActivity  {
             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(notficationChannel);
         }
-   }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -122,18 +122,19 @@ public class MainActivity extends AppCompatActivity  {
         return super.onOptionsItemSelected(item);
     }
 
-    class Helper extends TimerTask
-    {
-        public  int i = 0;
-        public void run()
-        {
+    class Helper extends TimerTask {
+        public int i = 0;
+
+        public void run() {
             System.out.println("hello world");
             displayNotification();
         }
     }
+}
 
 
-        }
+
+
 
 
 
