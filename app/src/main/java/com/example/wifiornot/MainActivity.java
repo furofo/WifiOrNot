@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity  {
         timer.schedule(task, 0, 5000);
 
         System.out.println("Timer running");
-       
+
 
     }
 
@@ -78,7 +78,8 @@ public class MainActivity extends AppCompatActivity  {
         builder.setSmallIcon(R.drawable.ic_sms_notification);
         builder.setOngoing(true);
         builder.setContentText(notficationText);
-        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        builder.setVibrate(new long[] { 0, 0 });
+        builder.setPriority(NotificationCompat.PRIORITY_LOW);
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
         notificationManagerCompat.notify(NOTIFICATION_ID, builder.build());
@@ -89,9 +90,10 @@ public class MainActivity extends AppCompatActivity  {
         {
             CharSequence name = "Personal Notification";
             String description = "Include all the personal notifications";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            int importance = NotificationManager.IMPORTANCE_LOW;
 
             NotificationChannel notficationChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            notficationChannel.enableVibration(false);
 
             notficationChannel.setDescription(description);
             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
