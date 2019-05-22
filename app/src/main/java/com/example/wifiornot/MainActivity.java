@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -47,7 +48,10 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+
         displayNotification();
+        startService();
 
 
         Timer timer = new Timer();
@@ -55,11 +59,16 @@ public class MainActivity extends AppCompatActivity {
         Date date = new Date();
 
 
-        timer.schedule(task, 0, 5000);
+        timer.schedule(task, 0, 1000); // THIS RUNS DISPLAY NOTIFICAITON EVERY SECOND
 
         System.out.println("Timer running");
 
 
+    }
+
+    public void startService() {
+        Intent serviceIntent = new Intent (this, ExampleService.class);
+        startService(serviceIntent);
     }
 
 
