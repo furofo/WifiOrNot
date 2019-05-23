@@ -11,7 +11,7 @@ public class StartActivityOnBootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
-            Intent i = new Intent(context, MainActivity.class);
+            Intent i = new Intent(context, MainActivity.class); //whatever class i want to open
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
         }

@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        displayNotification();
+        //displayNotification();
         startService();
 
 
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         Date date = new Date();
 
 
-        timer.schedule(task, 0, 1000); // THIS RUNS DISPLAY NOTIFICAITON EVERY SECOND
+       // timer.schedule(task, 0, 1000); // THIS RUNS DISPLAY NOTIFICAITON EVERY SECOND
 
         System.out.println("Timer running");
 
@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void startService() {
         Intent serviceIntent = new Intent (this, ExampleService.class);
+        System.out.println("service started");
         startService(serviceIntent);
     }
 

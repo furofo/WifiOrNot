@@ -31,7 +31,7 @@ public class YourService extends Service {
     }
 
     private void startForeground() {
-        Intent notificationIntent = new Intent(this, MainActivity.class);
+        Intent notificationIntent = new Intent(this, ExampleService.class);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
                 notificationIntent, 0);
