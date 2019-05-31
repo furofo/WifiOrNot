@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -21,6 +22,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RemoteViews;
 
 import java.util.Date;
 import java.util.Timer;
@@ -76,18 +78,25 @@ public class MainActivity extends AppCompatActivity {
     public void displayNotification() {
         ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        RemoteViews collapsedView = new RemoteViews(getPackageName(),
+                R.layout.notification_collapsed);
 
         if (mWifi.isConnected()) {
             // Do whatever
+            collapsedView.setTextColor(R.id.text_view_collapsed_1, Color.rgb(34,139,34));
+            collapsedView.setTextViewText(R.id.text_view_collapsed_1, "You are on Wifi!");
             notficationText = "You are on wifi";
         } else {
+            collapsedView.setTextColor(R.id.text_view_collapsed_1, Color.rgb(255,0,0));
+            collapsedView.setTextViewText(R.id.text_view_collapsed_1, "You are not on Wifi!");
             notficationText = "You are not on wifi";
         }
         createNotificationChannel();
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
         builder.setSmallIcon(R.drawable.ic_sms_notification);
         builder.setOngoing(true);
-        builder.setContentText(notficationText);
+        builder.setCustomContentView(collapsedView);
+        builder.setStyle(new NotificationCompat.DecoratedCustomViewStyle());
         builder.setVibrate(new long[]{0, 0});
         builder.setPriority(NotificationCompat.PRIORITY_LOW);
 

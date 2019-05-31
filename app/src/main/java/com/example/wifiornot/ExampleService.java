@@ -4,10 +4,12 @@ import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.widget.RemoteViews;
 
 import java.util.Date;
 import java.util.Timer;
@@ -43,18 +45,24 @@ public class ExampleService extends Service {
     public void displayForeground() {
         ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        RemoteViews collapsedView = new RemoteViews(getPackageName(),
+                R.layout.notification_collapsed);
 
         if (mWifi.isConnected()) {
             // Do whatever
             notificationText = "You are on wifi";
+            collapsedView.setTextColor(R.id.text_view_collapsed_1, Color.rgb(34,139,34));
+            collapsedView.setTextViewText(R.id.text_view_collapsed_1, "You are on Wifi!");
         } else {
+            collapsedView.setTextColor(R.id.text_view_collapsed_1, Color.rgb(255,0,0));
+            collapsedView.setTextViewText(R.id.text_view_collapsed_1, "You are not on Wifi!");
             notificationText = "You are not on wifi";
         }
 
 
-        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID).setContentTitle
-                ("WifiOrNot")
-                .setContentText(notificationText)
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setCustomContentView(collapsedView)
+                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                 .setSmallIcon(R.drawable.ic_android)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .build();
