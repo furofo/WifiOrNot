@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="25dp">
+
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24dp"
+
+        android:text="This application tells you in English if you are connected to wifi or not. To check simply open this application and swipe down from the top of your phone to view your notifications.  If you are connected to wifi you should see large green text saying: You are connected to wifi! If you are not you will see red text saying: You are not connected to wifi. It is as simple as that!."
+
+         />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView2"
+        android:layout_marginTop="75dp"
+
+        android:text="This application is designed to run when the phone starts and in background so it
+        should always be running if not simply open this app and close it out!"
+        android:textSize="20dp"
+         />
+</RelativeLayout>

@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.RemoteViews;
 
 import java.util.Date;
@@ -30,6 +33,7 @@ import java.util.TimerTask;
 
 
 public class MainActivity extends AppCompatActivity {
+    private Button button;
     private final String CHANNEL_ID = "personal_notifications";
     private final int NOTIFICATION_ID = 001;
     private String notficationText = "You are not on wifi";
@@ -39,6 +43,15 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        button = (Button) findViewById(R.id.helpbutton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivity2();
+            }
+        });
+
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -68,6 +81,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void openActivity2() {
+        Intent intent = new Intent(this, Help.class);
+        startActivity(intent);
+    }
+
     public void startService() {
         Intent serviceIntent = new Intent (this, ExampleService.class);
         System.out.println("service started");
@@ -80,16 +98,33 @@ public class MainActivity extends AppCompatActivity {
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         RemoteViews collapsedView = new RemoteViews(getPackageName(),
                 R.layout.notification_collapsed);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            Network network = connectivityManager.getActiveNetwork();
+            NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(network);
+               if(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                   collapsedView.setTextColor(R.id.text_view_collapsed_1, Color.rgb(34,139,34));
+                   collapsedView.setTextViewText(R.id.text_view_collapsed_1, "You are on Wifi!");
+               }
+               else {
+                   collapsedView.setTextColor(R.id.text_view_collapsed_1, Color.rgb(255,0,0));
+                   collapsedView.setTextViewText(R.id.text_view_collapsed_1, "You are not on Wifi!");
+               }
+        }
 
-        if (mWifi.isConnected()) {
-            // Do whatever
-            collapsedView.setTextColor(R.id.text_view_collapsed_1, Color.rgb(34,139,34));
-            collapsedView.setTextViewText(R.id.text_view_collapsed_1, "You are on Wifi!");
-            notficationText = "You are on wifi";
-        } else {
-            collapsedView.setTextColor(R.id.text_view_collapsed_1, Color.rgb(255,0,0));
-            collapsedView.setTextViewText(R.id.text_view_collapsed_1, "You are not on Wifi!");
-            notficationText = "You are not on wifi";
+        else {
+
+
+            if (mWifi.isConnected()) {
+                // Do whatever
+                collapsedView.setTextColor(R.id.text_view_collapsed_1, Color.rgb(34, 139, 34));
+                collapsedView.setTextViewText(R.id.text_view_collapsed_1, "You are on Wifi!");
+                notficationText = "You are on wifi";
+            } else {
+                collapsedView.setTextColor(R.id.text_view_collapsed_1, Color.rgb(255, 0, 0));
+                collapsedView.setTextViewText(R.id.text_view_collapsed_1, "You are not on Wifi!");
+                notficationText = "You are not on wifi";
+            }
         }
         createNotificationChannel();
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
