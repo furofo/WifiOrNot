@@ -63,7 +63,7 @@ public class ExampleService extends Service {
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setCustomContentView(collapsedView)
                 .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
-                .setSmallIcon(R.drawable.ic_android)
+                .setSmallIcon(R.drawable.ic_sms_notification)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .build();
 
